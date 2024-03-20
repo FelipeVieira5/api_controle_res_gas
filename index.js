@@ -27,6 +27,10 @@ const despesasList = [
 api.get('/receita',(req, res) => {
     let repostaReceita = '';
 
+    if(!receitasList.length){
+        res.status(500).send();
+        return;
+    }
     for(const receita of receitasList){
         repostaReceita += '<p>';
         repostaReceita += "Id: "+receita.id+"<br>";
@@ -60,10 +64,10 @@ api.get('/receita/visualizar/:idRecei',(req, res) => {
 
 //adicionar uma nova receira
 api.post('/receita/add',(req,res) => {
-   const maiorID = Math.max(...receitasList.map(({ id }) => id));
+   let maiorID = Math.max(...receitasList.map(({ id }) => id));
    
    const objReceita = {id: maiorID+1,descricao:req.body.descricao ,valor:req.body.valor, categoria:req.body.categoria};
-
+    if (!receitasList.length)maiorID=0;
    receitasList.push(objReceita);
     res.send('Usuario adicionado');
     return;
@@ -107,7 +111,10 @@ api.delete('/receita/deletar/:idRecei',(req,res) => {
 // Develor lista de despesas 
 api.get('/despesa',(req, res) => {
     let repostaDespesas = '';
-
+    if(!despesasList.length){
+        res.status(500).send();
+        return;
+    }
     for(const despesa of despesasList){
         repostaDespesas += '<p>';
         repostaDespesas += "Id: "+despesa.id+"<br>";
@@ -141,8 +148,9 @@ api.get('/despesa/visualizar/:idDesp',(req, res) => {
 
 //adicionar uma nova despesa
 api.post('/despesa/add',(req,res) => {
-    const maiorID = Math.max(...despesasList.map(({ id }) => id));
+    let maiorID = Math.max(...despesasList.map(({ id }) => id));
 
+    if (!despesasList.length) maiorID=0;
     const objDespesa = {id: maiorID+1,descricao:req.body.descricao ,valor:req.body.valor, categoria:req.body.categoria};
 
     despesasList.push(objDespesa);
